@@ -26,7 +26,16 @@ jobs:
         run: |
           mkdir -p arknights/img
           rm -rf arknights/img/*
-          cp -r temp-images/* arknights/img/
+          
+          cp -r temp-images/avatars arknights/img/
+          cp -r temp-images/characters arknights/img/
+          cp -r temp-images/classes arknights/img/
+          cp -r temp-images/equip arknights/img/
+          cp -r temp-images/factions arknights/img/
+          cp -r temp-images/items arknights/img/
+          cp -r temp-images/skills arknights/img/
+          cp -r temp-images/portraits arknights/img/
+          cp -r temp-images/skingroups arknights/img/
 
       - name: Commit and push changes
         run: |
