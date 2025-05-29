@@ -22,12 +22,12 @@ jobs:
         run: |
           git clone --depth=1 https://github.com/PuppiizSunniiz/Arknight-Images temp-images
 
-      - name: Copy to arknights/img
+      - name: Create img dir
         run: |
           mkdir -p arknights/img
           rm -rf arknights/img/*
 
-      - name: Copy to arknights/img
+      - name: Split file folders
         run: |
           mkdir -p arknights/img
           rm -rf arknights/img/*
@@ -42,7 +42,7 @@ jobs:
           cp -r temp-images/portraits arknights/img/
           cp -r temp-images/skingroups arknights/img/
 
-      - name: Commit and push changes
+      - name: Setup User
         run: |
           git config user.name "MangoBot"
           git config user.email "actions@github.com"
@@ -56,6 +56,61 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Sync Arknights Classes
+        run: |
+          git add arknights/img/classes
+          git commit -m "Sync Arknights classes" || echo "No changes to classes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Arknights items
+        run: |
+          git add arknights/img/items
+          git commit -m "Sync Arknights items" || echo "No changes to items to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Arknights portraits
+        run: |
+          git add arknights/img/portraits
+          git commit -m "Sync Arknights portraits" || echo "No changes to portraits to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Arknights skills
+        run: |
+          git add arknights/img/skills
+          git commit -m "Sync Arknights skills" || echo "No changes to skills to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Arknights factions
+        run: |
+          git add arknights/img/factions
+          git commit -m "Sync Arknights factions" || echo "No changes to factions to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Sync Arknights skingroups
+        run: |
+          git add arknights/img/skingroups
+          git commit -m "Sync skingroups" || echo "No changes to skingroups to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Arknights equip
+        run: |
+          git add arknights/img/equip
+          git commit -m "Sync equip" || echo "No changes to equip to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Sync Arknights Characters
         run: |
