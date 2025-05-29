@@ -41,6 +41,7 @@ jobs:
         run: |
           git config user.name "MangoBot"
           git config user.email "actions@github.com"
+          git config http.postBuffer 524288000
           git add arknights/img
           git commit -m "Sync images from Arknight-Images repo" || echo "No changes to commit"
           git push
