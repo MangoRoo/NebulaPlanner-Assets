@@ -1,0 +1,38 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Update Arknights Game Data
+
+# Controls when the workflow will run
+on:
+  # every day at midnight
+  schedule:
+    - cron: '0 0 * * *'  # every day at midnight UTC
+                          # git config user.name "MangoBot"
+                          # git config user.email "actions@github.com"
+  workflow_dispatch:
+  
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Clone source repo
+        run: |
+          git clone --depth=1 https://github.com/PuppiizSunniiz/Arknight-Images temp-images
+
+      - name: Copy to arknights/img
+        run: |
+          mkdir -p arknights/img
+          rm -rf arknights/img/*
+          cp -r temp-images/* arknights/img/
+
+      - name: Commit and push changes
+        run: |
+          git add arknights/img
+          git commit -m "Sync images from Arknight-Images repo" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
