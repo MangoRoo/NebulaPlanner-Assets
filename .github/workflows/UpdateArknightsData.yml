@@ -7,8 +7,7 @@ on:
   # every day at midnight
   schedule:
     - cron: '0 0 * * *'  # every day at midnight UTC
-                          # git config user.name "MangoBot"
-                          # git config user.email "actions@github.com"
+                          
   workflow_dispatch:
   
 jobs:
@@ -31,6 +30,8 @@ jobs:
 
       - name: Commit and push changes
         run: |
+          git config user.name "MangoBot"
+          git config user.email "actions@github.com"
           git add arknights/img
           git commit -m "Sync images from Arknight-Images repo" || echo "No changes to commit"
           git push
