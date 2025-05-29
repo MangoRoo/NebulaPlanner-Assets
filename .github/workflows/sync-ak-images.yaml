@@ -1,0 +1,32 @@
+name: Sync Arknights Images
+
+on:
+  workflow_dispatch:         # Allow manual triggering
+  schedule:
+    - cron: '0 0 * * *'      # Every day at midnight UTC
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout your repo
+        uses: actions/checkout@v3
+
+      - name: Clone source repo
+        run: |
+          git clone --depth=1 https://github.com/PuppiizSunniiz/Arknight-Images temp-images
+
+      - name: Copy to arknights/img
+        run: |
+          mkdir -p arknights/img
+          rm -rf arknights/img/*
+          cp -r temp-images/* arknights/img/
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add arknights/img
+          git commit -m "Sync images from Arknight-Images repo" || echo "No changes to commit"
+          git push
