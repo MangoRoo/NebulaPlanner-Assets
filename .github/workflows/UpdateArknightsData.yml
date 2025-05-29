@@ -51,7 +51,7 @@ jobs:
       - name: Sync Arknights Avatars
         run: |
           git add arknights/img/avatars
-          git commit -m "Sync Arknights Avatars" || echo "No changes to commit"
+          git commit -m "Sync Arknights Avatars" || echo "No changes to avatars to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,29 +59,28 @@ jobs:
           
       - name: Sync Arknights Characters
         run: |
-          FILE_LIST=$(find arknights/img/characters -type f)
-          COUNT=0
-          BATCH=()
-      
-          for FILE in $FILE_LIST; do
-            BATCH+=("$FILE")
-            ((COUNT++))
-      
-            if (( COUNT % 500 == 0 )); then
-              echo "Committing batch of 500 files..."
-              git add "${BATCH[@]}"
-              git commit -m "Sync Arknights Characters (batch $((COUNT / 500)))"
-              BATCH=()
-              git push
-            fi
-          done
-      
-          # Commit remaining files if any
-          if (( ${#BATCH[@]} > 0 )); then
-            echo "Committing remaining ${#BATCH[@]} files..."
-            git add "${BATCH[@]}"
-            git commit -m "Sync Arknights Characters (final batch)"
-            git push
-          fi
+          FILES=( $(find arknights/img/characters -type f | sort) )
+          TOTAL=${#FILES[@]}
+          CHUNK=$(( (TOTAL + 2) / 3 ))
+          
+          echo "Total files: $TOTAL"
+          echo "Files per chunk: $CHUNK"
+          echo "Committing portion 1..."
+          git add "${FILES[@]:0:$CHUNK}"
+          git commit -m "Sync Arknights Characters (portion 1)" || echo "No changes in portion 1"
+          git push
+          
+          # Second portion
+          echo "Committing portion 2..."
+          git add "${FILES[@]:$CHUNK:$CHUNK}"
+          git commit -m "Sync Arknights Characters (portion 2)" || echo "No changes in portion 2"
+          git push
+          
+          # Third portion
+          echo "Committing portion 3..."
+          REMAINING=$((TOTAL - CHUNK * 2))
+          git add "${FILES[@]:$((CHUNK * 2)):$REMAINING}"
+          git commit -m "Sync Arknights Characters (portion 3)" || echo "No changes in portion 3"
+          git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
