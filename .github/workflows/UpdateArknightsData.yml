@@ -26,6 +26,11 @@ jobs:
         run: |
           mkdir -p arknights/img
           rm -rf arknights/img/*
+
+      - name: Copy to arknights/img
+        run: |
+          mkdir -p arknights/img
+          rm -rf arknights/img/*
           
           cp -r temp-images/avatars arknights/img/
           cp -r temp-images/characters arknights/img/
@@ -42,8 +47,12 @@ jobs:
           git config user.name "MangoBot"
           git config user.email "actions@github.com"
           git config http.postBuffer 524288000
-          git add arknights/img
-          git commit -m "Sync images from Arknight-Images repo" || echo "No changes to commit"
+          git add arknights/img/avatars
+          git commit -m "Sync Arknights Avatars" || echo "No changes to commit"
+          git push
+
+          git add arknights/img/characters
+          git commit -m "Sync Arknights Characters" || echo "No changes to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
