@@ -59,9 +59,6 @@ jobs:
           
       - name: Sync Arknights Characters
         run: |
-          git config user.name "MangoBot"
-          git config user.email "actions@github.com"
-      
           FILE_LIST=$(find arknights/img/characters -type f)
           COUNT=0
           BATCH=()
