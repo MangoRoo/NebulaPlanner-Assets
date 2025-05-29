@@ -47,12 +47,44 @@ jobs:
           git config user.name "MangoBot"
           git config user.email "actions@github.com"
           git config http.postBuffer 524288000
+
+      - name: Sync Arknights Avatars
+        run: |
           git add arknights/img/avatars
           git commit -m "Sync Arknights Avatars" || echo "No changes to commit"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-          git add arknights/img/characters
-          git commit -m "Sync Arknights Characters" || echo "No changes to commit"
-          git push
+          
+      - name: Sync Arknights Characters
+        run: |
+          git config user.name "MangoBot"
+          git config user.email "actions@github.com"
+      
+          FILE_LIST=$(find arknights/img/characters -type f)
+          COUNT=0
+          BATCH=()
+      
+          for FILE in $FILE_LIST; do
+            BATCH+=("$FILE")
+            ((COUNT++))
+      
+            if (( COUNT % 500 == 0 )); then
+              echo "Committing batch of 500 files..."
+              git add "${BATCH[@]}"
+              git commit -m "Sync Arknights Characters (batch $((COUNT / 500)))"
+              BATCH=()
+              git push
+            fi
+          done
+      
+          # Commit remaining files if any
+          if (( ${#BATCH[@]} > 0 )); then
+            echo "Committing remaining ${#BATCH[@]} files..."
+            git add "${BATCH[@]}"
+            git commit -m "Sync Arknights Characters (final batch)"
+            git push
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
