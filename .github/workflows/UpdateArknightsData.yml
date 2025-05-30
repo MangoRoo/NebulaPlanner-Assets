@@ -41,6 +41,7 @@ jobs:
           cp -r temp-images/skills arknights/img/
           cp -r temp-images/portraits arknights/img/
           cp -r temp-images/skingroups arknights/img/
+          cp -r temp-images/ui arknights/img/
 
       - name: Setup User
         run: |
@@ -108,6 +109,14 @@ jobs:
         run: |
           git add arknights/img/equip
           git commit -m "Sync equip" || echo "No changes to equip to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Arknights ui
+        run: |
+          git add arknights/img/ui
+          git commit -m "Sync ui" || echo "No changes to ui to commit"
           git push
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
